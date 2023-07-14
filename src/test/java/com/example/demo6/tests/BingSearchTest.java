@@ -1,5 +1,7 @@
-package com.example.demo6;
+package com.example.demo6.tests;
 
+import com.example.demo6.pages.MainPage;
+import com.example.demo6.pages.ResultsPage;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.openqa.selenium.By;
@@ -10,7 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.time.Duration;
 import java.util.List;
 
-public class MainPageTest {
+public class BingSearchTest {
     private WebDriver driver;
 
 
@@ -32,20 +34,28 @@ public class MainPageTest {
     }
 
     @Test
-    public void search() {
-        String imput = "Selenium";
-        WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
-        searchField.sendKeys(imput);
-        searchField.submit();
+    public void searchRuseltsTest() {
+        String input = "Selenium";
+        MainPage mp = new MainPage(driver);
+        mp.sendText(input);
 
-        WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
-        assertEquals(imput, searchPageField.getAttribute("value"));
+        ResultsPage rp =new ResultsPage(driver);
+        rp.clickElement(0);
+        assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Открылась не верная ссылка");
     }
 
+    @Test
 
-    public void clickElement(List<WebElement> results, int num) {
-        System.out.println("нажимаем на элемент списка под номером:" + num);
-        results.get(num).click();
+    public void searchFieldTest() {
+        String input = "Selenium";
+
+        MainPage mp = new MainPage(driver);
+        mp.sendText(input);
+
+        ResultsPage rp =new ResultsPage(driver);
+
+        assertEquals(input,rp.getTextFromSearchField(),"Текст не совпал");
+
 
     }
 }
